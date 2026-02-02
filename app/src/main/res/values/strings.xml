@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LockAPk</string>
+    <string name="grant_all_permissions">Grant All Permissions</string>
+    <string name="device_android_id">Device Android ID</string>
+    <string name="device_setup">Device Setup</string>
+    <string name="your_device_is_locked">YOUR DEVICE IS LOCKED</string>
+    <string name="lock_message_english">Dear Customer,\nThis is to remind you that your EMI payment date has arrived. Kindly settle the EMI before the due date.</string>
+    <string name="lock_message_hindi">प्रिय ग्राहक,\nयह आपको याद दिलाने के लिए है कि आपकी EMI भुगतान की तिथि आ गई है। कृपया नियत तिथि से पहले EMI का भुगतान कर दें। धन्यवाद।</string>
+</resources>

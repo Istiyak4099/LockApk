@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "167466574794",
+    "project_id": "retailer-emi-assist-kiwfo",
+    "storage_bucket": "retailer-emi-assist-kiwfo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167466574794:android:cbfb07c3e7fc4d304ae533",
+        "android_client_info": {
+          "package_name": "com.example.lockapk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167466574794-8d95p7n9fsjdum7sapircbpevfrjcf7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpx6nror5VfaNT01jGPmYeCJJxuOpr1zM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167466574794-8d95p7n9fsjdum7sapircbpevfrjcf7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
