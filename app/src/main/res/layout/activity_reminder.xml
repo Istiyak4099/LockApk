@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFEFEF">
+
+    <ImageView
+        android:id="@+id/iconImageView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@android:drawable/ic_dialog_info"
+        app:tint="#D32F2F"
+        app:layout_constraintBottom_toTopOf="@+id/titleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Reminder"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#D32F2F"
+        app:layout_constraintBottom_toTopOf="@+id/messageTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconImageView"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/messageTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Please pay your EMI immediately to avoid device lockout."
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textColor="#333333"
+        app:layout_constraintBottom_toTopOf="@+id/dismissButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/dismissButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dismiss"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

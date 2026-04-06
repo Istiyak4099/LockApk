@@ -69,4 +69,7 @@ dependencies {
 
 // WorkManager for reliable background tasks
     implementation(libs.androidx.work.runtime.ktx)
+    // QR Code Generator
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

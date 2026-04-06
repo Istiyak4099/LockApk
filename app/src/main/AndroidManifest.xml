@@ -2,18 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Network & Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Device Admin & Boot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Foreground Service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- UI & System -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <!-- Location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <application
         android:allowBackup="false"
@@ -42,12 +52,28 @@
             android:label="Device Info" />
 
         <activity
+            android:name=".ReminderActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop" />
+
+        <activity
             android:name=".LockScreenActivity"
             android:exported="false"
             android:launchMode="singleInstance"
             android:screenOrientation="fullSensor"
             android:showOnLockScreen="true"
             android:theme="@style/Theme.LockApk.FullScreen" />
+
+        <activity
+            android:name=".GetProvisioningModeActivity"
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <intent-filter>
+                <action android:name="android.app.action.GET_PROVISIONING_MODE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".PolicyComplianceActivity"
@@ -59,6 +85,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Device Admin Receiver - MATCHES TEST DPC PATTERN -->
         <receiver
             android:name=".MyDeviceAdminReceiver"
             android:description="@string/app_name"
@@ -70,11 +97,34 @@
                 android:resource="@xml/device_admin_receiver" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
                 <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE" />
+                <action android:name="android.app.action.DEVICE_OWNER_CHANGED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.app.action.TRANSFER_OWNERSHIP_COMPLETE" />
             </intent-filter>
         </receiver>
 
+        <!-- Policy Applier Receiver -->
+        <receiver
+            android:name=".PolicyApplierReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.lockapk.APPLY_POLICIES" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Boot Receiver - Starts service on device boot -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".FirestoreListenerService"

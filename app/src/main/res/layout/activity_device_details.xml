@@ -1,73 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:fillViewport="true"
+    android:background="#F8F9FA">
 
-    <View
-        android:id="@+id/headerBackground"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#D32F2F"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvHeaderTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="EMI Dashboard"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvHeaderTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <LinearLayout
+        <!-- Header Section with QR Code (Compact) -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EMI Details"
-                android:textColor="#D32F2F"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="#EEEEEE" />
-
-            <TextView
-                android:id="@+id/tvEmiData"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loading details..."
-                android:textSize="16sp"
-                android:lineSpacingExtra="8dp"
-                android:textColor="#333333" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="20dp">
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/ivQrCode"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="Android ID QR Code"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Device ID"
+                        android:textSize="13sp"
+                        android:textColor="#888888"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:id="@+id/tvAndroidId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading..."
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#202124"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Data Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EMI Details"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1A73E8"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"/>
+
+        <!-- EMI Details Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvEmiData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading EMI details..."
+                    android:textSize="16sp"
+                    android:textColor="#3C4043"
+                    android:lineSpacingExtra="10dp"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

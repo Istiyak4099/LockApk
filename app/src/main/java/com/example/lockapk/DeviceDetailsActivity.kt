@@ -1,10 +1,19 @@
 package com.example.lockapk
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 
 class DeviceDetailsActivity : AppCompatActivity() {
 
@@ -15,7 +24,35 @@ class DeviceDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device_details)
 
         val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+        // Display Android ID
+        val tvAndroidId = findViewById<TextView>(R.id.tvAndroidId)
+        tvAndroidId.text = androidId
+
+        // Generate and display QR Code
+        val ivQrCode = findViewById<ImageView>(R.id.ivQrCode)
+        val qrBitmap = generateQRCode(androidId, 500)
+        ivQrCode.setImageBitmap(qrBitmap)
+
+
+        // Fetch EMI details
         fetchEmiDetails(androidId)
+    }
+
+    private fun generateQRCode(text: String, size: Int = 512): Bitmap {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, size, size)
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565)
+        for (x in 0 until size) {
+            for (y in 0 until size) {
+                bitmap.setPixel(
+                    x, y,
+                    if (bitMatrix[x, y]) android.graphics.Color.BLACK
+                    else android.graphics.Color.WHITE
+                )
+            }
+        }
+        return bitmap
     }
 
     private fun fetchEmiDetails(androidId: String) {
@@ -32,7 +69,6 @@ class DeviceDetailsActivity : AppCompatActivity() {
                 if (snapshots != null && !snapshots.isEmpty) {
                     val doc = snapshots.documents[0]
 
-                    // Manually retrieving fields to maintain YOUR exact sequence
                     val product = doc.getString("product_name") ?: "N/A"
                     val price = doc.get("price") ?: "0"
                     val procFee = doc.get("processing_fee") ?: "0"
@@ -41,7 +77,6 @@ class DeviceDetailsActivity : AppCompatActivity() {
                     val numEmi = doc.get("number_of_emi") ?: "0"
                     val monthlyAmt = doc.get("emi_monthly_amount") ?: "0"
 
-                    // Building the display string
                     val displayText = """
                         Product: $product
                         Price: $price
