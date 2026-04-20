@@ -6,4 +6,8 @@
     <string name="your_device_is_locked">YOUR DEVICE IS LOCKED</string>
     <string name="lock_message_english">Dear Customer,\nThis is to remind you that your EMI payment date has arrived. Kindly settle the EMI before the due date.</string>
     <string name="lock_message_hindi">प्रिय ग्राहक,\nयह आपको याद दिलाने के लिए है कि आपकी EMI भुगतान की तिथि आ गई है। कृपया नियत तिथि से पहले EMI का भुगतान कर दें। धन्यवाद।</string>
+    <string name="contact_retailer">Contact Your Retailer</string>
+    <string name="call_now">📞  CALL NOW</string>
+    <string name="loading_contact">Loading retailer contact…</string>
+    <string name="contact_unavailable">Retailer contact unavailable</string>
 </resources>

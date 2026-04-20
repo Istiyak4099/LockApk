@@ -44,8 +44,23 @@ object DeviceOwnerManager {
                 // 3. DO NOT USE DISALLOW_APPS_CONTROL - It blocks ALL app uninstalls
                 // Removed: dpm.addUserRestriction(adminComponent, UserManager.DISALLOW_APPS_CONTROL)
 
-                // 4. Enable lock task mode
-                dpm.setLockTaskPackages(adminComponent, arrayOf(context.packageName))
+                // 4. Enable lock task mode (whitelist app + dialers for the call button)
+                val packagesToLock = mutableListOf(context.packageName,
+                    "com.android.server.telecom",
+                    "com.google.android.dialer",
+                    "com.samsung.android.dialer",
+                    "com.samsung.android.incallui",
+                    "com.android.incallui",
+                    "com.android.phone")
+
+                val dialIntent = Intent(Intent.ACTION_DIAL)
+                val resolveInfo = context.packageManager.resolveActivity(dialIntent, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)
+                resolveInfo?.activityInfo?.packageName?.let { dialerPkg ->
+                    if (!packagesToLock.contains(dialerPkg)) {
+                        packagesToLock.add(dialerPkg)
+                    }
+                }
+                dpm.setLockTaskPackages(adminComponent, packagesToLock.toTypedArray())
 
                 // 5. Prevent safe boot
                 dpm.addUserRestriction(adminComponent, UserManager.DISALLOW_SAFE_BOOT)
@@ -68,7 +83,8 @@ object DeviceOwnerManager {
                     val sensorPermissions = listOf(
                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                        android.Manifest.permission.CALL_PHONE
                     )
                     for (permission in sensorPermissions) {
                         try {

@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         if (isSetupCompleted()) return
-        
+
         val isDeviceOwner = DeviceOwnerManager.isDeviceOwner(this)
         if (isDeviceOwner) {
             if (isAllRuntimePermissionsGranted()) {

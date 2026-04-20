@@ -37,6 +37,62 @@ class DeviceDetailsActivity : AppCompatActivity() {
 
         // Fetch EMI details
         fetchEmiDetails(androidId)
+
+        // Fetch Retailer details
+        fetchRetailerInfo(androidId)
+    }
+
+    private fun fetchRetailerInfo(androidId: String) {
+        val tvShopName = findViewById<TextView>(R.id.tvShopName)
+        val tvShopOwner = findViewById<TextView>(R.id.tvShopOwner)
+        val tvShopAddress = findViewById<TextView>(R.id.tvShopAddress)
+        val tvShopMobile = findViewById<TextView>(R.id.tvShopMobile)
+
+        db.collection("Customers")
+            .whereEqualTo("android_id", androidId)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { customerSnapshots ->
+                if (customerSnapshots.isEmpty) {
+                    setRetailerError("No customer profile found.")
+                    return@addOnSuccessListener
+                }
+
+                val customerDoc = customerSnapshots.documents[0]
+                val retailerUid = customerDoc.getString("created_by_uid")
+
+                if (retailerUid.isNullOrBlank()) {
+                    setRetailerError("Creator info missing.")
+                    return@addOnSuccessListener
+                }
+
+                db.collection("Retailers")
+                    .document(retailerUid)
+                    .get()
+                    .addOnSuccessListener { retailerDoc ->
+                        if (retailerDoc.exists()) {
+                            tvShopName.text = retailerDoc.getString("shop_name") ?: "N/A"
+                            tvShopOwner.text = retailerDoc.getString("shop_owner_name") ?: "N/A"
+                            tvShopAddress.text = retailerDoc.getString("shop_address") ?: "N/A"
+                            tvShopMobile.text = retailerDoc.getString("mobile_number") ?: "N/A"
+                        } else {
+                            setRetailerError("Retailer details not found.")
+                        }
+                    }
+                    .addOnFailureListener {
+                        setRetailerError("Failed to load retailer info.")
+                    }
+            }
+            .addOnFailureListener {
+                setRetailerError("Failed to load customer profile.")
+            }
+    }
+
+    private fun setRetailerError(message: String) {
+        findViewById<TextView>(R.id.tvShopName).text = message
+        findViewById<TextView>(R.id.tvShopOwner).text = "N/A"
+        findViewById<TextView>(R.id.tvShopAddress).text = "N/A"
+        findViewById<TextView>(R.id.tvShopMobile).text = "N/A"
     }
 
     private fun generateQRCode(text: String, size: Int = 512): Bitmap {
