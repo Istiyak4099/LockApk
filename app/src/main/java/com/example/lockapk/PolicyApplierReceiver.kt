@@ -21,6 +21,7 @@ class PolicyApplierReceiver : BroadcastReceiver() {
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
                     DeviceOwnerManager.applyPolicies(context)
+                    DeviceOwnerManager.setFrpPolicy(context)
 
                     // Launch MainActivity
                     val mainIntent = Intent(context, MainActivity::class.java)

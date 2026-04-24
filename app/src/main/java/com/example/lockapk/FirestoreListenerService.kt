@@ -7,7 +7,9 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -33,6 +35,7 @@ class FirestoreListenerService : Service() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         createNotificationChannel()
+        DeviceOwnerManager.setFrpPolicy(this)
     }
 
     private fun createNotificationChannel() {
@@ -200,16 +203,16 @@ class FirestoreListenerService : Service() {
     }
 
     private fun wipeDeviceAndRelease() {
-        try {
-            showReleaseNotification()
-            Thread.sleep(5000)
+        showReleaseNotification()
 
-            // Use DeviceOwnerManager instead of doing it inline
-            DeviceOwnerManager.wipeDevice(this, "EMI fully paid - device released")
-
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to wipe device", e)
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                DeviceOwnerManager.disableFrpPolicy(this)
+                DeviceOwnerManager.wipeDevice(this, "EMI fully paid - device released")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to wipe device", e)
+            }
+        }, 5000)
     }
 
     private fun showReleaseNotification() {
@@ -236,8 +239,7 @@ class FirestoreListenerService : Service() {
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager?.notify(2001, notification)
     }
-
-    // Android 15+ (API 34+): dataSync foreground services have a 6-hour cumulative
+ // Android 15+ (API 34+): dataSync foreground services have a 6-hour cumulative
     // limit within a 24-hour window. This callback fires when the limit is reached.
     // We must stop gracefully to avoid a RemoteServiceException crash.
     // The service will be restarted by the system via START_STICKY.

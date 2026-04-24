@@ -151,4 +151,55 @@ object DeviceOwnerManager {
             Log.e(TAG, "Failed to wipe device", e)
         }
     }
+
+    fun setFrpPolicy(context: Context) {
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val adminComponent = getComponentName(context)
+
+        if (!isDeviceOwner(context)) {
+            Log.e(TAG, "❌ Not Device Owner - cannot set FRP policy")
+            return
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                // Note: Some Android versions require the 21-digit Google Account ID (numeric string)
+                // instead of the email address. If the email doesn't work during a real test,
+                // replace this string with the numeric ID.
+                val frpAccounts = listOf("abusaidsk808@gmail.com")
+                val frpPolicy = android.app.admin.FactoryResetProtectionPolicy.Builder()
+                    .setFactoryResetProtectionAccounts(frpAccounts)
+                    .setFactoryResetProtectionEnabled(true)
+                    .build()
+                dpm.setFactoryResetProtectionPolicy(adminComponent, frpPolicy)
+                Log.i(TAG, "Factory Reset Protection (FRP) policy applied via setFrpPolicy")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to apply FRP Policy", e)
+            }
+        } else {
+            Log.i(TAG, "FRP setup skipped: requires Android 11 (API 30) or above")
+        }
+    }
+
+    fun disableFrpPolicy(context: Context) {
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val adminComponent = getComponentName(context)
+
+        if (!isDeviceOwner(context)) {
+            Log.e(TAG, "❌ Not Device Owner - cannot disable FRP policy")
+            return
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                // Explicitly disable FRP by clearing the policy
+                dpm.setFactoryResetProtectionPolicy(adminComponent, null)
+                Log.i(TAG, "Factory Reset Protection (FRP) disabled via disableFrpPolicy")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to disable FRP Policy", e)
+            }
+        } else {
+            Log.i(TAG, "FRP disable skipped: requires Android 11 (API 30) or above")
+        }
+    }
 }
